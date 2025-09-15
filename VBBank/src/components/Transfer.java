@@ -6,9 +6,9 @@ import java.util.Date;
 public class Transfer extends Flow {
 	private int fromAccount;
 
-	public Transfer(String comment, String identifier, double amount, int targetAccountNumber, boolean effect,
+	public Transfer(String comment, double amount, int targetAccountNumber, boolean effect,
 			Date date, int fromAccount) {
-		super(comment, identifier, amount, targetAccountNumber, effect, date);
+		super(comment, amount, targetAccountNumber, effect, date);
 		this.fromAccount = fromAccount;
 	}
 
