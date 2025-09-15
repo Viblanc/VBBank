@@ -1,6 +1,10 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
+
 import components.Account;
 import components.Client;
 import components.CurrentAccount;
@@ -45,10 +49,28 @@ public class Main {
 		});
 	}
 
+	// 1.3.1 Adaptation of the table of accounts
+	public static Map<Integer, Account> loadAccountHashMap(List<Account> accounts) {
+		Map<Integer, Account> accountMap = accounts.stream()
+				.collect(Collectors.toMap(a -> a.getAccountNumber(), a -> a));
+
+		return accountMap;
+	}
+
+	public static void displayAccountHashMap(Map<Integer, Account> accountMap) {
+		accountMap.entrySet().stream()
+				.sorted((e1, e2) -> Double.compare(e1.getValue().getBalance(), e2.getValue().getBalance()))
+				.forEach(entry -> {
+					System.out.println(entry.toString());
+				});
+	}
+
 	public static void main(String[] args) {
 		List<Client> clients = loadClients(5);
 		displayClients(clients);
 		List<Account> accounts = loadAccounts(clients);
 		displayAccounts(accounts);
+		Map<Integer, Account> accountMap = loadAccountHashMap(accounts);
+		displayAccountHashMap(accountMap);
 	}
 }
