@@ -80,18 +80,18 @@ public class Main {
 
 		// credit of 100.50€ on every current account
 		flows.addAll(accounts.stream().filter(CurrentAccount.class::isInstance)
-				.map(account -> new Credit("credit on account " + account.getAccountNumber(), 100.5,
-						account.getAccountNumber(), false, LocalDate.now().plusDays(2)))
+				.map(account -> new Credit("credit on current account " + account.getAccountNumber(), 100.5,
+						account.getAccountNumber(), true, LocalDate.now().plusDays(2)))
 				.toList());
 
 		// credit of 500€ on every savings account
 		flows.addAll(accounts.stream().filter(SavingsAccount.class::isInstance)
-				.map(account -> new Credit("credit on account " + account.getAccountNumber(), 1500,
-						account.getAccountNumber(), false, LocalDate.now().plusDays(2)))
+				.map(account -> new Credit("credit on savings account " + account.getAccountNumber(), 1500,
+						account.getAccountNumber(), true, LocalDate.now().plusDays(2)))
 				.toList());
 
 		// transfer of 50€ from account 1 to account 2
-		flows.add(new Transfer("transfer from account 1 to account 2", 50.0, 2, false, LocalDate.now().plusDays(2), 1));
+		flows.add(new Transfer("transfer from account 1 to account 2", 50.0, 2, true, LocalDate.now().plusDays(2), 1));
 
 		return flows;
 	}
@@ -114,7 +114,7 @@ public class Main {
 		}
 
 		accountMap.values().stream().filter(hasNegativeBalance).findAny()
-				.ifPresent(acc -> System.out.println("Account " + acc.getAccountNumber() + " has a negative value! " + acc));
+				.ifPresent(acc -> System.out.println("Account " + acc.getAccountNumber() + " has a negative value!"));
 	}
 
 	// 2.1 JSON file of flows
@@ -150,17 +150,25 @@ public class Main {
 
 	public static void main(String[] args) {
 		List<Client> clients = loadClients(5);
+		System.out.println("Clients:");
 		displayClients(clients);
+		System.out.println("");
 
 //		List<Account> accounts = loadAccounts(clients);
 		List<Account> accounts = loadAccountsFromXML();
+		System.out.println("Clients:");
 		displayAccounts(accounts);
+		System.out.println("");
 
 		Map<Integer, Account> accountMap = loadAccountHashMap(accounts);
+		System.out.println("Clients' accounts:");
 		displayAccountHashMap(accountMap);
+		System.out.println("");
 
 //		List<Flow> flows = loadFlows(accounts);
 		List<Flow> flows = loadFlowsFromJson();
 		processFlows(flows, accountMap);
+		System.out.println("Clients' accounts after flows:");
+		displayAccountHashMap(accountMap);
 	}
 }
