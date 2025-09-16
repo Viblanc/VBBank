@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -6,11 +7,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -25,14 +28,40 @@ import components.Debit;
 import components.Flow;
 import components.SavingsAccount;
 import components.Transfer;
+import net.datafaker.Faker;
+import net.datafaker.providers.base.Name;
 
 // 1.1.2 Creation of main class for tests
 public class Main {
 	public static List<Client> loadClients(int numberOfClients) {
-		List<Client> clients = new ArrayList<>();
+		// Add fake data to generate clients
+		Faker faker = new Faker(Locale.FRANCE);
 
-		for (int i = 1; i <= numberOfClients; i++) {
-			clients.add(new Client("firstName" + i, "lastName" + i));
+		List<Client> clients = IntStream.range(0, numberOfClients).mapToObj(idx -> {
+			Name name = faker.name();
+			return new Client(name.firstName(), name.lastName());
+		}).toList();
+		
+		// save clients in a json file
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			mapper.writeValue(new File("./clients.json"), clients);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return clients;
+	}
+	
+	public static List<Client> loadClientsFromJson() {
+		List<Client> clients = new ArrayList<>();
+		ObjectMapper mapper = new ObjectMapper();
+
+		try (BufferedReader in = Files.newBufferedReader(Paths.get("./clients.json"))) {
+			String data = in.lines().collect(Collectors.joining(System.lineSeparator()));
+			clients = Arrays.asList(mapper.readValue(data, Client[].class));
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
 		return clients;
@@ -51,6 +80,15 @@ public class Main {
 		for (Client client : clients) {
 			accounts.add(new CurrentAccount(getLabel.apply("Current", client), client));
 			accounts.add(new SavingsAccount(getLabel.apply("Savings", client), client));
+		}
+		
+		// save accounts in an xml file
+		AccountList accountList = new AccountList(accounts);
+		XmlMapper mapper = new XmlMapper();
+		try {
+			mapper.writeValue(new File("./accounts.xml"), accountList);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
 		return accounts;
@@ -114,7 +152,7 @@ public class Main {
 		}
 
 		accountMap.values().stream().filter(hasNegativeBalance).findAny()
-				.ifPresent(acc -> System.out.println("Account " + acc.getAccountNumber() + " has a negative value!"));
+				.ifPresent(acc -> System.out.println("Account " + acc.getAccountNumber() + " has a negative value!\n"));
 	}
 
 	// 2.1 JSON file of flows
@@ -132,12 +170,11 @@ public class Main {
 
 		return flows;
 	}
-	
+
 	// 2.2 XML file of accounts
 	public static List<Account> loadAccountsFromXML() {
 		List<Account> accounts = new ArrayList<>();
 		XmlMapper mapper = new XmlMapper();
-		mapper.registerModule(new JavaTimeModule());
 
 		try (BufferedReader in = Files.newBufferedReader(Paths.get("./accounts.xml"))) {
 			String data = in.lines().collect(Collectors.joining(System.lineSeparator()));
@@ -148,28 +185,53 @@ public class Main {
 
 		return accounts;
 	}
-
-	public static void main(String[] args) {
+	
+	public static void loadFromMain() {
 		List<Client> clients = loadClients(5);
 		System.out.println("Clients:");
 		displayClients(clients);
 		System.out.println("");
-
-//		List<Account> accounts = loadAccounts(clients);
-		List<Account> accounts = loadAccountsFromXML();
-		System.out.println("Clients:");
+		
+		List<Account> accounts = loadAccounts(clients);
+		System.out.println("Accounts:");
 		displayAccounts(accounts);
 		System.out.println("");
-
+		
 		Map<Integer, Account> accountMap = loadAccountHashMap(accounts);
 		System.out.println("Clients' accounts:");
 		displayAccountHashMap(accountMap);
 		System.out.println("");
-
-//		List<Flow> flows = loadFlows(accounts);
+		
+		List<Flow> flows = loadFlows(accounts);
+		processFlows(flows, accountMap);
+		System.out.println("Clients' accounts after flows:");
+		displayAccountHashMap(accountMap);
+	}
+	
+	public static void loadFromFiles() {
+		List<Client> clients = loadClientsFromJson();
+		System.out.println("Clients:");
+		displayClients(clients);
+		System.out.println("");
+		
+		List<Account> accounts = loadAccountsFromXML();
+		System.out.println("Accounts:");
+		displayAccounts(accounts);
+		System.out.println("");
+		
+		Map<Integer, Account> accountMap = loadAccountHashMap(accounts);
+		System.out.println("Clients' accounts:");
+		displayAccountHashMap(accountMap);
+		System.out.println("");
+		
 		List<Flow> flows = loadFlowsFromJson();
 		processFlows(flows, accountMap);
 		System.out.println("Clients' accounts after flows:");
 		displayAccountHashMap(accountMap);
+	}
+
+	public static void main(String[] args) {
+//		loadFromMain();
+		loadFromFiles();
 	}
 }

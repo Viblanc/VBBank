@@ -1,101 +1,101 @@
 <accounts>
 	<account _type="current">
-		<label>firstName1 lastName1's Current Account</label>
+		<label>Charlotte Laine's Current Account</label>
 		<balance>0.0</balance>
 		<accountNumber>1</accountNumber>
 		<client>
-			<firstName>firstName1</firstName>
-			<lastName>lastName1</lastName>
+			<firstName>Charlotte</firstName>
+			<lastName>Laine</lastName>
 			<clientNumber>1</clientNumber>
 		</client>
 	</account>
 	<account _type="savings">
-		<label>firstName1 lastName1's Savings Account</label>
+		<label>Charlotte Laine's Savings Account</label>
 		<balance>0.0</balance>
 		<accountNumber>2</accountNumber>
 		<client>
-			<firstName>firstName1</firstName>
-			<lastName>lastName1</lastName>
+			<firstName>Charlotte</firstName>
+			<lastName>Laine</lastName>
 			<clientNumber>1</clientNumber>
 		</client>
 	</account>
 	<account _type="current">
-		<label>firstName2 lastName2's Current Account</label>
+		<label>Clémence Dufour's Current Account</label>
 		<balance>0.0</balance>
 		<accountNumber>3</accountNumber>
 		<client>
-			<firstName>firstName2</firstName>
-			<lastName>lastName2</lastName>
+			<firstName>Clémence</firstName>
+			<lastName>Dufour</lastName>
 			<clientNumber>2</clientNumber>
 		</client>
 	</account>
 	<account _type="savings">
-		<label>firstName2 lastName2's Savings Account</label>
+		<label>Clémence Dufour's Savings Account</label>
 		<balance>0.0</balance>
 		<accountNumber>4</accountNumber>
 		<client>
-			<firstName>firstName2</firstName>
-			<lastName>lastName2</lastName>
+			<firstName>Clémence</firstName>
+			<lastName>Dufour</lastName>
 			<clientNumber>2</clientNumber>
 		</client>
 	</account>
 	<account _type="current">
-		<label>firstName3 lastName3's Current Account</label>
+		<label>Maëlys Pierre's Current Account</label>
 		<balance>0.0</balance>
 		<accountNumber>5</accountNumber>
 		<client>
-			<firstName>firstName3</firstName>
-			<lastName>lastName3</lastName>
+			<firstName>Maëlys</firstName>
+			<lastName>Pierre</lastName>
 			<clientNumber>3</clientNumber>
 		</client>
 	</account>
 	<account _type="savings">
-		<label>firstName3 lastName3's Savings Account</label>
+		<label>Maëlys Pierre's Savings Account</label>
 		<balance>0.0</balance>
 		<accountNumber>6</accountNumber>
 		<client>
-			<firstName>firstName3</firstName>
-			<lastName>lastName3</lastName>
+			<firstName>Maëlys</firstName>
+			<lastName>Pierre</lastName>
 			<clientNumber>3</clientNumber>
 		</client>
 	</account>
 	<account _type="current">
-		<label>firstName4 lastName4's Current Account</label>
+		<label>Lucie Simon's Current Account</label>
 		<balance>0.0</balance>
 		<accountNumber>7</accountNumber>
 		<client>
-			<firstName>firstName4</firstName>
-			<lastName>lastName4</lastName>
+			<firstName>Lucie</firstName>
+			<lastName>Simon</lastName>
 			<clientNumber>4</clientNumber>
 		</client>
 	</account>
 	<account _type="savings">
-		<label>firstName4 lastName4's Savings Account</label>
+		<label>Lucie Simon's Savings Account</label>
 		<balance>0.0</balance>
 		<accountNumber>8</accountNumber>
 		<client>
-			<firstName>firstName4</firstName>
-			<lastName>lastName4</lastName>
+			<firstName>Lucie</firstName>
+			<lastName>Simon</lastName>
 			<clientNumber>4</clientNumber>
 		</client>
 	</account>
 	<account _type="current">
-		<label>firstName5 lastName5's Current Account</label>
+		<label>Victor Dumont's Current Account</label>
 		<balance>0.0</balance>
 		<accountNumber>9</accountNumber>
 		<client>
-			<firstName>firstName5</firstName>
-			<lastName>lastName5</lastName>
+			<firstName>Victor</firstName>
+			<lastName>Dumont</lastName>
 			<clientNumber>5</clientNumber>
 		</client>
 	</account>
 	<account _type="savings">
-		<label>firstName5 lastName5's Savings Account</label>
+		<label>Victor Dumont's Savings Account</label>
 		<balance>0.0</balance>
 		<accountNumber>10</accountNumber>
 		<client>
-			<firstName>firstName5</firstName>
-			<lastName>lastName5</lastName>
+			<firstName>Victor</firstName>
+			<lastName>Dumont</lastName>
 			<clientNumber>5</clientNumber>
 		</client>
 	</account>
