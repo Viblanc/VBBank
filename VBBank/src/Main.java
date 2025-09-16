@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import components.Account;
@@ -27,9 +28,7 @@ public class Main {
 	}
 
 	public static void displayClients(List<Client> clients) {
-		clients.stream().forEach(client -> {
-			System.out.println(client.toString());
-		});
+		clients.stream().forEach(System.out::println);
 	}
 
 	// 1.2.3 Creation of the table of accounts
@@ -37,7 +36,6 @@ public class Main {
 		List<Account> accounts = new ArrayList<>();
 		BiFunction<String, Client, String> getLabel = (accountType, client) -> String.format("%s %s's %s Account",
 				client.getFirstName(), client.getLastName(), accountType);
-		;
 
 		for (Client client : clients) {
 			accounts.add(new CurrentAccount(getLabel.apply("Current", client), client));
@@ -48,25 +46,19 @@ public class Main {
 	}
 
 	public static void displayAccounts(List<Account> accounts) {
-		accounts.stream().forEach(account -> {
-			System.out.println(account.toString());
-		});
+		accounts.stream().forEach(System.out::println);
 	}
 
 	// 1.3.1 Adaptation of the table of accounts
 	public static Map<Integer, Account> loadAccountHashMap(List<Account> accounts) {
-		Map<Integer, Account> accountMap = accounts.stream()
-				.collect(Collectors.toMap(a -> a.getAccountNumber(), a -> a));
-
-		return accountMap;
+		return accounts.stream()
+				.collect(Collectors.toMap(Account::getAccountNumber, Function.identity()));
 	}
 
 	public static void displayAccountHashMap(Map<Integer, Account> accountMap) {
 		accountMap.entrySet().stream()
 				.sorted((e1, e2) -> Double.compare(e1.getValue().getBalance(), e2.getValue().getBalance()))
-				.forEach(entry -> {
-					System.out.println(entry.toString());
-				});
+				.forEach(System.out::println);
 	}
 
 	// 1.3.4 Creation of the flow array
@@ -78,17 +70,17 @@ public class Main {
 
 		// credit of 100.50€ on every current account
 		flows.addAll(
-				accounts.stream().filter(account -> account instanceof CurrentAccount)
+				accounts.stream().filter(CurrentAccount.class::isInstance)
 						.map(account -> new Credit("credit on account " + account.getAccountNumber(), 100.5,
 								account.getAccountNumber(), false, LocalDate.now().plusDays(2)))
-						.collect(Collectors.toList()));
+						.toList());
 		
 		// credit of 500€ on every savings account
 		flows.addAll(
-				accounts.stream().filter(account -> account instanceof SavingsAccount)
+				accounts.stream().filter(SavingsAccount.class::isInstance)
 						.map(account -> new Credit("credit on account " + account.getAccountNumber(), 1500,
 								account.getAccountNumber(), false, LocalDate.now().plusDays(2)))
-						.collect(Collectors.toList()));
+						.toList());
 
 		// transfer of 50€ from account 1 to account 2
 		flows.add(
