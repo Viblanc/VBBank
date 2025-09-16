@@ -27,8 +27,18 @@ public abstract class Account {
 		return balance;
 	}
 
-	public void setBalance(double amount) {
-		this.balance = amount;
+	public void setBalance(Flow flow) {
+		if (flow instanceof Debit) {
+			this.balance -= flow.getAmount();
+		} else if (flow instanceof Credit) {
+			this.balance += flow.getAmount();
+		} else if (flow instanceof Transfer transfer) {
+			if (transfer.getTargetAccountNumber() == this.accountNumber) {
+				this.balance += transfer.getAmount();
+			} else if (transfer.getFromAccount() == this.accountNumber) {
+				this.balance -= transfer.getAmount();
+			}
+		}
 	}
 
 	public int getAccountNumber() {

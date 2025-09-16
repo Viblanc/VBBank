@@ -96,6 +96,14 @@ public class Main {
 
 		return flows;
 	}
+	
+	// 1.3.5 Updating accounts
+	public static void processFlows(List<Flow> flows, Map<Integer, Account> accountMap) {
+		for (Flow flow : flows) {
+			Account account = accountMap.get(flow.getTargetAccountNumber());
+			account.setBalance(flow);
+		}
+	}
 
 	public static void main(String[] args) {
 		List<Client> clients = loadClients(5);
