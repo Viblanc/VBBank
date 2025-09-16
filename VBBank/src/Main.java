@@ -13,9 +13,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import components.Account;
+import components.AccountList;
 import components.Client;
 import components.Credit;
 import components.CurrentAccount;
@@ -102,7 +104,7 @@ public class Main {
 		for (Flow flow : flows) {
 			if (flow instanceof Transfer transfer) {
 				Account from = accountMap.get(transfer.getFromAccount());
-				Account to = accountMap.get(transfer.getFromAccount());
+				Account to = accountMap.get(transfer.getTargetAccountNumber());
 				from.setBalance(transfer);
 				to.setBalance(transfer);
 			} else {
@@ -112,7 +114,7 @@ public class Main {
 		}
 
 		accountMap.values().stream().filter(hasNegativeBalance).findAny()
-				.ifPresent(acc -> System.out.println("Account " + acc.getAccountNumber() + " has a negative value!"));
+				.ifPresent(acc -> System.out.println("Account " + acc.getAccountNumber() + " has a negative value! " + acc));
 	}
 
 	// 2.1 JSON file of flows
@@ -131,11 +133,27 @@ public class Main {
 		return flows;
 	}
 
+	public static List<Account> loadAccountsFromXML() {
+		List<Account> accounts = new ArrayList<>();
+		XmlMapper mapper = new XmlMapper();
+		mapper.registerModule(new JavaTimeModule());
+
+		try (BufferedReader in = Files.newBufferedReader(Paths.get("./accounts.xml"))) {
+			String data = in.lines().collect(Collectors.joining(System.lineSeparator()));
+			accounts = mapper.readValue(data, AccountList.class).getAccounts();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return accounts;
+	}
+
 	public static void main(String[] args) {
 		List<Client> clients = loadClients(5);
 		displayClients(clients);
 
-		List<Account> accounts = loadAccounts(clients);
+//		List<Account> accounts = loadAccounts(clients);
+		List<Account> accounts = loadAccountsFromXML();
 		displayAccounts(accounts);
 
 		Map<Integer, Account> accountMap = loadAccountHashMap(accounts);
