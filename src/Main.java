@@ -41,7 +41,7 @@ public class Main {
 			Name name = faker.name();
 			return new Client(name.firstName(), name.lastName());
 		}).toList();
-		
+
 		// save clients in a json file
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -49,10 +49,10 @@ public class Main {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return clients;
 	}
-	
+
 	public static List<Client> loadClientsFromJson() {
 		List<Client> clients = new ArrayList<>();
 		ObjectMapper mapper = new ObjectMapper();
@@ -81,7 +81,7 @@ public class Main {
 			accounts.add(new CurrentAccount(getLabel.apply("Current", client), client));
 			accounts.add(new SavingsAccount(getLabel.apply("Savings", client), client));
 		}
-		
+
 		// save accounts in an xml file
 		AccountList accountList = new AccountList(accounts);
 		XmlMapper mapper = new XmlMapper();
@@ -185,46 +185,39 @@ public class Main {
 
 		return accounts;
 	}
-	
+
 	public static void loadFromMain() {
 		List<Client> clients = loadClients(5);
-		System.out.println("Clients:");
-		displayClients(clients);
-		System.out.println("");
-		
 		List<Account> accounts = loadAccounts(clients);
-		System.out.println("Accounts:");
-		displayAccounts(accounts);
-		System.out.println("");
-		
 		Map<Integer, Account> accountMap = loadAccountHashMap(accounts);
-		System.out.println("Clients' accounts:");
-		displayAccountHashMap(accountMap);
-		System.out.println("");
-		
 		List<Flow> flows = loadFlows(accounts);
-		processFlows(flows, accountMap);
-		System.out.println("Clients' accounts after flows:");
-		displayAccountHashMap(accountMap);
+
+		display(clients, accounts, accountMap, flows);
 	}
-	
+
 	public static void loadFromFiles() {
 		List<Client> clients = loadClientsFromJson();
+		List<Account> accounts = loadAccountsFromXML();
+		Map<Integer, Account> accountMap = loadAccountHashMap(accounts);
+		List<Flow> flows = loadFlowsFromJson();
+
+		display(clients, accounts, accountMap, flows);
+	}
+
+	public static void display(List<Client> clients, List<Account> accounts, Map<Integer, Account> accountMap,
+			List<Flow> flows) {
 		System.out.println("Clients:");
 		displayClients(clients);
 		System.out.println("");
-		
-		List<Account> accounts = loadAccountsFromXML();
+
 		System.out.println("Accounts:");
 		displayAccounts(accounts);
 		System.out.println("");
-		
-		Map<Integer, Account> accountMap = loadAccountHashMap(accounts);
+
 		System.out.println("Clients' accounts:");
 		displayAccountHashMap(accountMap);
 		System.out.println("");
-		
-		List<Flow> flows = loadFlowsFromJson();
+
 		processFlows(flows, accountMap);
 		System.out.println("Clients' accounts after flows:");
 		displayAccountHashMap(accountMap);
