@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import components.Account;
@@ -51,8 +52,7 @@ public class Main {
 
 	// 1.3.1 Adaptation of the table of accounts
 	public static Map<Integer, Account> loadAccountHashMap(List<Account> accounts) {
-		return accounts.stream()
-				.collect(Collectors.toMap(Account::getAccountNumber, Function.identity()));
+		return accounts.stream().collect(Collectors.toMap(Account::getAccountNumber, Function.identity()));
 	}
 
 	public static void displayAccountHashMap(Map<Integer, Account> accountMap) {
@@ -64,45 +64,53 @@ public class Main {
 	// 1.3.4 Creation of the flow array
 	public static List<Flow> loadFlows(List<Account> accounts) {
 		List<Flow> flows = new ArrayList<>();
-		
+
 		// debit of 50€ from account 1
 		flows.add(new Debit("debit on account 1", 500.0, 1, true, LocalDate.now().plusDays(2)));
 
 		// credit of 100.50€ on every current account
-		flows.addAll(
-				accounts.stream().filter(CurrentAccount.class::isInstance)
-						.map(account -> new Credit("credit on account " + account.getAccountNumber(), 100.5,
-								account.getAccountNumber(), false, LocalDate.now().plusDays(2)))
-						.toList());
-		
+		flows.addAll(accounts.stream().filter(CurrentAccount.class::isInstance)
+				.map(account -> new Credit("credit on account " + account.getAccountNumber(), 100.5,
+						account.getAccountNumber(), false, LocalDate.now().plusDays(2)))
+				.toList());
+
 		// credit of 500€ on every savings account
-		flows.addAll(
-				accounts.stream().filter(SavingsAccount.class::isInstance)
-						.map(account -> new Credit("credit on account " + account.getAccountNumber(), 1500,
-								account.getAccountNumber(), false, LocalDate.now().plusDays(2)))
-						.toList());
+		flows.addAll(accounts.stream().filter(SavingsAccount.class::isInstance)
+				.map(account -> new Credit("credit on account " + account.getAccountNumber(), 1500,
+						account.getAccountNumber(), false, LocalDate.now().plusDays(2)))
+				.toList());
 
 		// transfer of 50€ from account 1 to account 2
-		flows.add(
-				new Transfer("transfer from account 1 to account 2", 50.0, 2, false, LocalDate.now().plusDays(2), 1));
+		flows.add(new Transfer("transfer from account 1 to account 2", 50.0, 2, false, LocalDate.now().plusDays(2), 1));
 
 		return flows;
 	}
-	
+
 	// 1.3.5 Updating accounts
 	public static void processFlows(List<Flow> flows, Map<Integer, Account> accountMap) {
+		Predicate<Account> hasNegativeBalance = account -> account.getBalance() < 0.0;
+
+		// update balances
 		for (Flow flow : flows) {
 			Account account = accountMap.get(flow.getTargetAccountNumber());
 			account.setBalance(flow);
 		}
+
+		accountMap.values().stream().filter(hasNegativeBalance).findAny()
+				.ifPresent(acc -> System.out.println("Account " + acc.getAccountNumber() + " has a negative value!"));
 	}
 
 	public static void main(String[] args) {
 		List<Client> clients = loadClients(5);
 		displayClients(clients);
+		
 		List<Account> accounts = loadAccounts(clients);
 		displayAccounts(accounts);
+		
 		Map<Integer, Account> accountMap = loadAccountHashMap(accounts);
 		displayAccountHashMap(accountMap);
+		
+		List<Flow> flows = loadFlows(accounts);
+		processFlows(flows, accountMap);
 	}
 }
