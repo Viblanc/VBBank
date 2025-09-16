@@ -132,7 +132,8 @@ public class Main {
 
 		return flows;
 	}
-
+	
+	// 2.2 XML file of accounts
 	public static List<Account> loadAccountsFromXML() {
 		List<Account> accounts = new ArrayList<>();
 		XmlMapper mapper = new XmlMapper();

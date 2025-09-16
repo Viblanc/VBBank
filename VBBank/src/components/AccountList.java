@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
+// 2.2 XML file of accounts
 @JacksonXmlRootElement(localName = "accounts")
 public class AccountList {
 	@JacksonXmlElementWrapper(useWrapping = false)
