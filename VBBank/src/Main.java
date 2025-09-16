@@ -1,11 +1,19 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import components.Account;
 import components.Client;
@@ -66,7 +74,7 @@ public class Main {
 		List<Flow> flows = new ArrayList<>();
 
 		// debit of 50€ from account 1
-		flows.add(new Debit("debit on account 1", 500.0, 1, true, LocalDate.now().plusDays(2)));
+		flows.add(new Debit("debit on account 1", 50.0, 1, true, LocalDate.now().plusDays(2)));
 
 		// credit of 100.50€ on every current account
 		flows.addAll(accounts.stream().filter(CurrentAccount.class::isInstance)
@@ -92,25 +100,49 @@ public class Main {
 
 		// update balances
 		for (Flow flow : flows) {
-			Account account = accountMap.get(flow.getTargetAccountNumber());
-			account.setBalance(flow);
+			if (flow instanceof Transfer transfer) {
+				Account from = accountMap.get(transfer.getFromAccount());
+				Account to = accountMap.get(transfer.getFromAccount());
+				from.setBalance(transfer);
+				to.setBalance(transfer);
+			} else {
+				Account account = accountMap.get(flow.getTargetAccountNumber());
+				account.setBalance(flow);
+			}
 		}
 
 		accountMap.values().stream().filter(hasNegativeBalance).findAny()
 				.ifPresent(acc -> System.out.println("Account " + acc.getAccountNumber() + " has a negative value!"));
 	}
 
+	// 2.1 JSON file of flows
+	public static List<Flow> loadFlowsFromJson() {
+		List<Flow> flows = new ArrayList<>();
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.registerModule(new JavaTimeModule());
+
+		try (BufferedReader in = Files.newBufferedReader(Paths.get("./flows.json"))) {
+			String data = in.lines().collect(Collectors.joining(System.lineSeparator()));
+			flows = Arrays.asList(mapper.readValue(data, Flow[].class));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return flows;
+	}
+
 	public static void main(String[] args) {
 		List<Client> clients = loadClients(5);
 		displayClients(clients);
-		
+
 		List<Account> accounts = loadAccounts(clients);
 		displayAccounts(accounts);
-		
+
 		Map<Integer, Account> accountMap = loadAccountHashMap(accounts);
 		displayAccountHashMap(accountMap);
-		
-		List<Flow> flows = loadFlows(accounts);
+
+//		List<Flow> flows = loadFlows(accounts);
+		List<Flow> flows = loadFlowsFromJson();
 		processFlows(flows, accountMap);
 	}
 }

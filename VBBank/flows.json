@@ -1,0 +1,147 @@
+[
+	{
+		"@type": "Debit",
+		"comment": "debit on account 1",
+		"amount": 50.0,
+		"targetAccountNumber": 1,
+		"effect": true,
+		"date": [
+			2025,
+			9,
+			18
+		]
+	},
+	{
+		"@type": "Credit",
+		"comment": "credit on account 1",
+		"amount": 100.5,
+		"targetAccountNumber": 1,
+		"effect": false,
+		"date": [
+			2025,
+			9,
+			18
+		]
+	},
+	{
+		"@type": "Credit",
+		"comment": "credit on account 3",
+		"amount": 100.5,
+		"targetAccountNumber": 3,
+		"effect": false,
+		"date": [
+			2025,
+			9,
+			18
+		]
+	},
+	{
+		"@type": "Credit",
+		"comment": "credit on account 5",
+		"amount": 100.5,
+		"targetAccountNumber": 5,
+		"effect": false,
+		"date": [
+			2025,
+			9,
+			18
+		]
+	},
+	{
+		"@type": "Credit",
+		"comment": "credit on account 7",
+		"amount": 100.5,
+		"targetAccountNumber": 7,
+		"effect": false,
+		"date": [
+			2025,
+			9,
+			18
+		]
+	},
+	{
+		"@type": "Credit",
+		"comment": "credit on account 9",
+		"amount": 100.5,
+		"targetAccountNumber": 9,
+		"effect": false,
+		"date": [
+			2025,
+			9,
+			18
+		]
+	},
+	{
+		"@type": "Credit",
+		"comment": "credit on account 2",
+		"amount": 1500.0,
+		"targetAccountNumber": 2,
+		"effect": false,
+		"date": [
+			2025,
+			9,
+			18
+		]
+	},
+	{
+		"@type": "Credit",
+		"comment": "credit on account 4",
+		"amount": 1500.0,
+		"targetAccountNumber": 4,
+		"effect": false,
+		"date": [
+			2025,
+			9,
+			18
+		]
+	},
+	{
+		"@type": "Credit",
+		"comment": "credit on account 6",
+		"amount": 1500.0,
+		"targetAccountNumber": 6,
+		"effect": false,
+		"date": [
+			2025,
+			9,
+			18
+		]
+	},
+	{
+		"@type": "Credit",
+		"comment": "credit on account 8",
+		"amount": 1500.0,
+		"targetAccountNumber": 8,
+		"effect": false,
+		"date": [
+			2025,
+			9,
+			18
+		]
+	},
+	{
+		"@type": "Credit",
+		"comment": "credit on account 10",
+		"amount": 1500.0,
+		"targetAccountNumber": 10,
+		"effect": false,
+		"date": [
+			2025,
+			9,
+			18
+		]
+	},
+	{
+		"@type": "Transfer",
+		"comment": "transfer from account 1 to account 2",
+		"amount": 50.0,
+		"targetAccountNumber": 2,
+		"effect": false,
+		"date": [
+			2025,
+			9,
+			18
+		],
+		"fromAccount": 1
+	}
+]

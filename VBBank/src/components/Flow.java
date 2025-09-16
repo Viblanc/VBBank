@@ -2,8 +2,20 @@ package components;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+//2.1 JSON file of flows
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
+@JsonSubTypes({
+	@JsonSubTypes.Type(value = Debit.class, name = "Debit"),
+	@JsonSubTypes.Type(value = Credit.class, name = "Credit"),
+	@JsonSubTypes.Type(value = Transfer.class, name = "Transfer"),
+})
 // 1.3.2 Creation of the Flow class
-public abstract class Flow {
+public class Flow {
 	private String comment;
 	private int identifier;
 	private double amount;
@@ -11,6 +23,8 @@ public abstract class Flow {
 	private boolean effect;
 	private LocalDate date;
 	private static int flowCount = 0;
+	
+	public Flow() {}
 	
 	public Flow(String comment, double amount, int targetAccountNumber, boolean effect, LocalDate date) {
 		this.comment = comment;
