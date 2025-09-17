@@ -1,27 +1,27 @@
 [
 	{
-		"firstName": "Charlotte",
-		"lastName": "Laine",
+		"firstName": "Ines",
+		"lastName": "Guérin",
 		"clientNumber": 1
 	},
 	{
-		"firstName": "Clémence",
-		"lastName": "Dufour",
+		"firstName": "Lou",
+		"lastName": "Girard",
 		"clientNumber": 2
 	},
 	{
-		"firstName": "Maëlys",
-		"lastName": "Pierre",
+		"firstName": "Noa",
+		"lastName": "Lacroix",
 		"clientNumber": 3
 	},
 	{
-		"firstName": "Lucie",
-		"lastName": "Simon",
+		"firstName": "Léo",
+		"lastName": "Duval",
 		"clientNumber": 4
 	},
 	{
-		"firstName": "Victor",
-		"lastName": "Dumont",
+		"firstName": "Sarah",
+		"lastName": "Marchal",
 		"clientNumber": 5
 	}
 ]

@@ -1,11 +1,5 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -14,10 +8,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import components.Account;
 import components.AccountList;
@@ -30,6 +20,7 @@ import components.SavingsAccount;
 import components.Transfer;
 import net.datafaker.Faker;
 import net.datafaker.providers.base.Name;
+import utils.FileManager;
 
 // 1.1.2 Creation of main class for tests
 public class Main {
@@ -43,28 +34,13 @@ public class Main {
 		}).toList();
 
 		// save clients in a json file
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			mapper.writeValue(new File("./clients.json"), clients);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		FileManager.saveAsJson(clients, "./clients.json");
 
 		return clients;
 	}
 
 	public static List<Client> loadClientsFromJson() {
-		List<Client> clients = new ArrayList<>();
-		ObjectMapper mapper = new ObjectMapper();
-
-		try (BufferedReader in = Files.newBufferedReader(Paths.get("./clients.json"))) {
-			String data = in.lines().collect(Collectors.joining(System.lineSeparator()));
-			clients = Arrays.asList(mapper.readValue(data, Client[].class));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return clients;
+		return FileManager.loadJsonFile("./clients.json", Client.class);
 	}
 
 	public static void displayClients(List<Client> clients) {
@@ -83,13 +59,7 @@ public class Main {
 		}
 
 		// save accounts in an xml file
-		AccountList accountList = new AccountList(accounts);
-		XmlMapper mapper = new XmlMapper();
-		try {
-			mapper.writeValue(new File("./accounts.xml"), accountList);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		FileManager.saveAsXml(new AccountList(accounts), "./accounts.xml");
 
 		return accounts;
 	}
@@ -157,33 +127,12 @@ public class Main {
 
 	// 2.1 JSON file of flows
 	public static List<Flow> loadFlowsFromJson() {
-		List<Flow> flows = new ArrayList<>();
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.registerModule(new JavaTimeModule());
-
-		try (BufferedReader in = Files.newBufferedReader(Paths.get("./flows.json"))) {
-			String data = in.lines().collect(Collectors.joining(System.lineSeparator()));
-			flows = Arrays.asList(mapper.readValue(data, Flow[].class));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return flows;
+		return FileManager.loadJsonFile("./flows.json", Flow.class);
 	}
 
 	// 2.2 XML file of accounts
 	public static List<Account> loadAccountsFromXML() {
-		List<Account> accounts = new ArrayList<>();
-		XmlMapper mapper = new XmlMapper();
-
-		try (BufferedReader in = Files.newBufferedReader(Paths.get("./accounts.xml"))) {
-			String data = in.lines().collect(Collectors.joining(System.lineSeparator()));
-			accounts = mapper.readValue(data, AccountList.class).getAccounts();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return accounts;
+		return FileManager.<Account>loadXmlFile("./accounts.xml", Account.class);
 	}
 
 	public static void loadFromMain() {
